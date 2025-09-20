@@ -3,7 +3,8 @@ const mongoose = require('mongoose');
 async function main() {
   try {
     await mongoose.connect(
-      'mongodb+srv://kiru:kiru614590@cluster1.v48saqm.mongodb.net/schoolDB?retryWrites=true&w=majority',
+      '//add your real connection string here',
+    
       {
         serverSelectionTimeoutMS: 10000
       }
@@ -38,3 +39,4 @@ async function main() {
 }
 
 main();
+
