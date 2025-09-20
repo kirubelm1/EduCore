@@ -1,0 +1,345 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>EduManage Pro - School Management System</title>
+    <meta name="description" content="Transform your school with intelligent management - comprehensive platform for administrators, teachers, students, and parents">
+    
+    <!-- Favicon -->
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg">
+    
+    <!-- Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="styles.css">
+    
+    <!-- Lucide Icons -->
+    <script src="https://unpkg.com/lucide@latest/dist/umd/lucide.js"></script>
+</head>
+<body>
+    <!-- Navigation -->
+    <nav class="navbar">
+        <div class="nav-container">
+            <div class="nav-brand">
+                <i data-lucide="graduation-cap" class="nav-icon"></i>
+                <span class="nav-title">EduManage Pro</span>
+            </div>
+            <div class="nav-menu">
+                <a href="#features" class="nav-link">Features</a>
+                <a href="#roles" class="nav-link">Dashboards</a>
+                <a href="#analytics" class="nav-link">Analytics</a>
+                <button class="btn btn-primary pulse-glow">Get Started</button>
+            </div>
+            <div class="mobile-menu-toggle">
+                <i data-lucide="menu"></i>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Hero Section -->
+    <section class="hero">
+        <div class="container">
+            <div class="hero-content">
+                <div class="badge">🚀 Next-Generation School Management</div>
+                <h1 class="hero-title">
+                    Transform Your School with 
+                    <span class="gradient-text">Intelligent Management</span>
+                </h1>
+                <p class="hero-description">
+                    Comprehensive, sustainable, and user-friendly platform that empowers administrators, 
+                    teachers, students, and parents with cutting-edge educational technology.
+                </p>
+                <div class="hero-buttons">
+                    <button class="btn btn-primary btn-large hover-lift">
+                        Start Free Trial
+                        <i data-lucide="chevron-right"></i>
+                    </button>
+                    <button class="btn btn-outline btn-large hover-lift">Watch Demo</button>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Stats Section -->
+    <section class="stats">
+        <div class="container">
+            <div class="stats-grid">
+                <div class="stat-item">
+                    <div class="stat-icon">
+                        <i data-lucide="globe"></i>
+                    </div>
+                    <div class="stat-value">SOON</div>
+                    <div class="stat-label">Schools Served</div>
+                </div>
+                <div class="stat-item">
+                    <div class="stat-icon">
+                        <i data-lucide="users"></i>
+                    </div>
+                    <div class="stat-value">SOON</div>
+                    <div class="stat-label">Students Managed</div>
+                </div>
+                <div class="stat-item">
+                    <div class="stat-icon">
+                        <i data-lucide="graduation-cap"></i>
+                    </div>
+                    <div class="stat-value">SOON</div>
+                    <div class="stat-label">Teachers Empowered</div>
+                </div>
+                <div class="stat-item">
+                    <div class="stat-icon">
+                        <i data-lucide="award"></i>
+                    </div>
+                    <div class="stat-value">SOON</div>
+                    <div class="stat-label">Success Rate</div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Role-Based Dashboards -->
+    <section id="roles" class="roles">
+        <div class="container">
+            <div class="section-header">
+                <h2 class="section-title">Tailored Dashboards for Every Role</h2>
+                <p class="section-description">
+                    Personalized experiences designed for administrators, teachers, students, and parents
+                </p>
+            </div>
+            <div class="roles-grid">
+                <div class="role-card hover-lift">
+                    <div class="role-icon bg-blue">
+                        <i data-lucide="shield"></i>
+                    </div>
+                    <h3 class="role-title">Admin Dashboard</h3>
+                    <p class="role-description">Complete school oversight with analytics and management tools</p>
+                    <ul class="role-features">
+                        <li><i data-lucide="check-circle"></i>User Management</li>
+                        <li><i data-lucide="check-circle"></i>System Analytics</li>
+                        <li><i data-lucide="check-circle"></i>Financial Reports</li>
+                        <li><i data-lucide="check-circle"></i>Performance Insights</li>
+                    </ul>
+                </div>
+                <div class="role-card hover-lift">
+                    <div class="role-icon bg-green">
+                        <i data-lucide="graduation-cap"></i>
+                    </div>
+                    <h3 class="role-title">Teacher Portal</h3>
+                    <p class="role-description">Streamlined teaching tools with real-time collaboration</p>
+                    <ul class="role-features">
+                        <li><i data-lucide="check-circle"></i>Grade Management</li>
+                        <li><i data-lucide="check-circle"></i>Attendance Tracking</li>
+                        <li><i data-lucide="check-circle"></i>Assignment Creation</li>
+                        <li><i data-lucide="check-circle"></i>Parent Communication</li>
+                    </ul>
+                </div>
+                <div class="role-card hover-lift">
+                    <div class="role-icon bg-purple">
+                        <i data-lucide="book-open"></i>
+                    </div>
+                    <h3 class="role-title">Student Hub</h3>
+                    <p class="role-description">Interactive learning environment with progress tracking</p>
+                    <ul class="role-features">
+                        <li><i data-lucide="check-circle"></i>Assignment Submission</li>
+                        <li><i data-lucide="check-circle"></i>Grade Viewing</li>
+                        <li><i data-lucide="check-circle"></i>Schedule Access</li>
+                        <li><i data-lucide="check-circle"></i>Resource Library</li>
+                    </ul>
+                </div>
+                <div class="role-card hover-lift">
+                    <div class="role-icon bg-orange">
+                        <i data-lucide="users"></i>
+                    </div>
+                    <h3 class="role-title">Parent Connect</h3>
+                    <p class="role-description">Stay connected with your child's educational journey</p>
+                    <ul class="role-features">
+                        <li><i data-lucide="check-circle"></i>Progress Monitoring</li>
+                        <li><i data-lucide="check-circle"></i>Teacher Communication</li>
+                        <li><i data-lucide="check-circle"></i>Fee Management</li>
+                        <li><i data-lucide="check-circle"></i>Event Updates</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Features Showcase -->
+    <section id="features" class="features">
+        <div class="container">
+            <div class="section-header">
+                <h2 class="section-title">Powerful Features That Drive Results</h2>
+                <p class="section-description">
+                    Everything you need to manage your educational institution efficiently
+                </p>
+            </div>
+            <div class="features-grid">
+                <div class="feature-card hover-lift">
+                    <div class="feature-header">
+                        <div class="feature-icon">
+                            <i data-lucide="user-check"></i>
+                        </div>
+                        <div class="feature-badge">10,000+ Students Managed</div>
+                    </div>
+                    <h3 class="feature-title">Student Information System</h3>
+                    <p class="feature-description">Comprehensive digital profiles that follow students across grades</p>
+                </div>
+                <div class="feature-card hover-lift active">
+                    <div class="feature-header">
+                        <div class="feature-icon">
+                            <i data-lucide="bar-chart-3"></i>
+                        </div>
+                        <div class="feature-badge">99.9% Accuracy Rate</div>
+                    </div>
+                    <h3 class="feature-title">Built-in Spreadsheet System</h3>
+                    <p class="feature-description">Auto-calculate grades, averages, GPA with real-time collaboration</p>
+                </div>
+                <div class="feature-card hover-lift">
+                    <div class="feature-header">
+                        <div class="feature-icon">
+                            <i data-lucide="clock"></i>
+                        </div>
+                        <div class="feature-badge">50% Time Saved Daily</div>
+                    </div>
+                    <h3 class="feature-title">Smart Attendance Tracking</h3>
+                    <p class="feature-description">Biometric, RFID, and app-based attendance with auto-notifications</p>
+                </div>
+                <div class="feature-card hover-lift">
+                    <div class="feature-header">
+                        <div class="feature-icon">
+                            <i data-lucide="message-square"></i>
+                        </div>
+                        <div class="feature-badge">24/7 Connectivity</div>
+                    </div>
+                    <h3 class="feature-title">Communication Hub</h3>
+                    <p class="feature-description">Seamless messaging between teachers, students, and parents</p>
+                </div>
+                <div class="feature-card hover-lift">
+                    <div class="feature-header">
+                        <div class="feature-icon">
+                            <i data-lucide="credit-card"></i>
+                        </div>
+                        <div class="feature-badge">100% Payment Tracking</div>
+                    </div>
+                    <h3 class="feature-title">Financial Management</h3>
+                    <p class="feature-description">Online payments, automated reminders, and comprehensive reporting</p>
+                </div>
+                <div class="feature-card hover-lift">
+                    <div class="feature-header">
+                        <div class="feature-icon">
+                            <i data-lucide="trending-up"></i>
+                        </div>
+                        <div class="feature-badge">85% Improvement Rate</div>
+                    </div>
+                    <h3 class="feature-title">Analytics & Insights</h3>
+                    <p class="feature-description">Predictive analytics to identify at-risk students and performance trends</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Sustainability Section -->
+    <section class="sustainability">
+        <div class="container">
+            <div class="section-header">
+                <div class="sustainability-icon">
+                    <i data-lucide="leaf"></i>
+                </div>
+                <h2 class="section-title">Built for Sustainability</h2>
+                <p class="section-description">
+                    Reduce paper waste, optimize resources, and create a greener future for education
+                </p>
+            </div>
+            <div class="sustainability-grid">
+                <div class="sustainability-item">
+                    <div class="sustainability-item-icon bg-blue">
+                        <i data-lucide="globe"></i>
+                    </div>
+                    <h3>Cloud-Based</h3>
+                    <p>Scalable infrastructure with automatic backups and energy-efficient hosting</p>
+                </div>
+                <div class="sustainability-item">
+                    <div class="sustainability-item-icon bg-purple">
+                        <i data-lucide="file-transfer"></i>
+                    </div>
+                    <h3>Digital First</h3>
+                    <p>Paperless reports, digital assignments, and electronic communication</p>
+                </div>
+                <div class="sustainability-item">
+                    <div class="sustainability-item-icon bg-orange">
+                        <i data-lucide="zap"></i>
+                    </div>
+                    <h3>Offline Sync</h3>
+                    <p>Works offline and syncs when connected, perfect for areas with limited internet</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- CTA Section -->
+    <section class="cta">
+        <div class="container">
+            <div class="cta-content">
+                <h2 class="cta-title">Ready to Transform Your School?</h2>
+                <p class="cta-description">
+                    Join thousands of educational institutions already using EduManage Pro
+                </p>
+                <div class="cta-buttons">
+                    <button class="btn btn-secondary btn-large hover-lift">Start Free Trial</button>
+                    <button class="btn btn-outline-white btn-large hover-lift">Schedule Demo</button>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-grid">
+                <div class="footer-brand">
+                    <div class="footer-logo">
+                        <i data-lucide="graduation-cap"></i>
+                        <span>EduManage Pro</span>
+                    </div>
+                    <p>Transforming education through intelligent school management solutions.</p>
+                </div>
+                <div class="footer-column">
+                    <h4>Features</h4>
+                    <ul>
+                        <li>Student Management</li>
+                        <li>Academic Planning</li>
+                        <li>Financial Tracking</li>
+                        <li>Communication Hub</li>
+                    </ul>
+                </div>
+                <div class="footer-column">
+                    <h4>Support</h4>
+                    <ul>
+                        <li>Documentation</li>
+                        <li>Training</li>
+                        <li>24/7 Support</li>
+                        <li>Community</li>
+                    </ul>
+                </div>
+                <div class="footer-column">
+                    <h4>Company</h4>
+                    <ul>
+                        <li>About Us</li>
+                        <li>Careers</li>
+                        <li>Privacy Policy</li>
+                        <li>Terms of Service</li>
+                    </ul>
+                </div>
+            </div>
+            <div class="footer-bottom">
+                <p>&copy; 2025 EduCore Pro. All rights reserved.</p>
+            </div>
+        </div>
+    </footer>
+
+    <!-- JavaScript -->
+    <script src="script.js"></script>
+</body>
+</html>
