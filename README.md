@@ -61,21 +61,45 @@ EduCore combines **tradition and innovation**, supporting schools with a simple,
 
 ## 📂 Project Structure
 ```
-Development/
-├── index.js
-├── mongodb.js
-├── home.html
-├── homepage.html
-├── login.html
-├── signup.html
-├── login.css
-├── signup.css
-├── home.css
-├── login.js
-├── signup.js
-├── package.json
-├── package-lock.json
-└── node_modules/
+EduCore/
+│── Development/
+│   ├── server.js          # Express server entry point
+│   ├── mongodb.js         # MongoDB connection
+│   ├── package.json
+│   ├── package-lock.json
+│   │
+│   ├── public/            # Frontend files
+│   │   ├── admin.html
+│   │   ├── teacher.html
+│   │   ├── student.html
+│   │   ├── login.html
+│   │   ├── signup.html
+│   │   │
+│   │   ├── css/           # Stylesheets
+│   │   │   ├── style.css  # Global + shared styles
+│   │   │   ├── admin.css
+│   │   │   ├── teacher.css
+│   │   │   └── student.css
+│   │   │
+│   │   ├── js/            # Frontend scripts
+│   │   │   ├── auth.js    # Login/Signup logic
+│   │   │   ├── admin.js
+│   │   │   ├── teacher.js
+│   │   │   └── student.js
+│   │   │
+│   │   └── img/           # Images, logos
+│   │       └── logo.png
+│   │
+│   ├── models/            # Database models
+│   │   └── User.js        # Handles Admin, Teacher, Student roles
+│   │
+│   ├── routes/            # Express routes
+│   │   └── auth.js        # Login & signup routes
+│   │
+│   └── README.md
+│
+└── .env                   # Environment variables (DB, secrets)
+
 ```
 
 ---
