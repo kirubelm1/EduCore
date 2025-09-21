@@ -3,7 +3,7 @@ const mongoose = require('mongoose');
 async function main() {
   try {
     await mongoose.connect(
-      'ur real mongodb connection string',
+      'Modify with your real mongodb connection string', //will be put in dotenv soon
       {
         serverSelectionTimeoutMS: 10000
       }
@@ -38,3 +38,4 @@ async function main() {
 }
 
 main();
+
