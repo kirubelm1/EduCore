@@ -159,20 +159,19 @@ function setActiveMenuItem(clickedItem = null) {
         item.classList.remove('active');
     });
     
-    // Remove active class from all submenu items
     const allSubmenuItems = document.querySelectorAll('.submenu-item');
     allSubmenuItems.forEach(item => {
         item.classList.remove('active');
     });
     
     if (clickedItem) {
-        // Add active class to clicked menu item
+    
         const parentMenuItem = clickedItem.closest('.menu-item');
         if (parentMenuItem) {
             parentMenuItem.classList.add('active');
         }
     } else {
-        // Set Dashboard as active by default
+     
         const dashboardItem = document.querySelector('.menu-item');
         if (dashboardItem) {
             dashboardItem.classList.add('active');
@@ -180,7 +179,7 @@ function setActiveMenuItem(clickedItem = null) {
     }
 }
 
-// Set active submenu item
+
 function setActiveSubmenuItem(clickedItem) {
     // Remove active class from all menu items and submenu items
     const allMenuItems = document.querySelectorAll('.menu-item');
@@ -193,7 +192,6 @@ function setActiveSubmenuItem(clickedItem) {
         item.classList.remove('active');
     });
     
-    // Add active class to clicked submenu item
     clickedItem.classList.add('active');
     
     // Add active class to parent menu item
@@ -226,7 +224,7 @@ function initializeSearch() {
     }
 }
 
-// Search through menu items
+
 function searchMenuItems(searchTerm) {
     const menuItems = document.querySelectorAll('.menu-item');
     const submenuItems = document.querySelectorAll('.submenu-item');
@@ -255,7 +253,7 @@ function searchMenuItems(searchTerm) {
         
         item.style.display = isMatch ? 'flex' : 'none';
         
-        // If child matches, show parent and expand it
+        
         if (isMatch && parentMenuItem) {
             parentMenuItem.style.display = 'block';
             parentMenuItem.classList.add('expanded');
@@ -263,7 +261,7 @@ function searchMenuItems(searchTerm) {
     });
 }
 
-// Reset menu search
+
 function resetMenuSearch() {
     const menuItems = document.querySelectorAll('.menu-item');
     const submenuItems = document.querySelectorAll('.submenu-item');
@@ -319,13 +317,12 @@ function updateCalendar() {
     // Clear previous calendar
     calendarGrid.innerHTML = '';
     
-    // Get first day of month and number of days
+    
     const firstDay = new Date(currentDate.getFullYear(), currentDate.getMonth(), 1);
     const lastDay = new Date(currentDate.getFullYear(), currentDate.getMonth() + 1, 0);
     const startDate = new Date(firstDay);
     startDate.setDate(startDate.getDate() - firstDay.getDay());
     
-    // Generate calendar days
     const today = new Date();
     const eventDates = [20, 22]; // Sample event dates
     
@@ -350,7 +347,7 @@ function updateCalendar() {
             dayElement.classList.add('has-event');
         }
         
-        // Add click handler
+      
         dayElement.addEventListener('click', () => {
             document.querySelectorAll('.calendar-day.selected').forEach(el => {
                 el.classList.remove('selected');
@@ -365,7 +362,7 @@ function updateCalendar() {
     }
 }
 
-// Update welcome message
+
 function updateWelcomeMessage() {
     const now = new Date();
     const hour = now.getHours();
@@ -384,7 +381,7 @@ function updateWelcomeMessage() {
     }
 }
 
-// Initialize progress chart
+
 function initializeProgressChart() {
     const chartContainer = document.querySelector('.progress-chart');
     if (chartContainer) {
@@ -459,7 +456,7 @@ function updateStatistics(data) {
 
 // Notification system
 function showNotification(message, type = 'info') {
-    // Create notification element
+   
     const notification = document.createElement('div');
     notification.className = `notification notification-${type}`;
     notification.style.cssText = `
@@ -505,18 +502,17 @@ function getNotificationColor(type) {
     }
 }
 
-// Navigation functions for quick actions
+
 function navigateTo(section) {
     console.log(`Navigating to ${section}`);
     showNotification(`Opening ${section} section...`, 'info');
     
-    // Here you would implement actual navigation
-    // For now, we'll just show a notification
+   
 }
 
 function requestLeave() {
     showNotification('Opening leave request form...', 'info');
-    // In a real app, this would open a modal or navigate to leave request page
+    // In the completed app, this would open a modal or navigate to leave request page
 }
 
 function payFees() {
@@ -591,4 +587,5 @@ function updateCurrentTime() {
         }
     });
 }
+
 
