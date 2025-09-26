@@ -517,32 +517,32 @@ function requestLeave() {
 
 function payFees() {
     showNotification('Redirecting to payment gateway...', 'info');
-    // In a real app, this would integrate with payment system
+    // In the completed app, this would integrate with payment system
 }
 
 function downloadReports() {
     showNotification('Preparing report download...', 'info');
-    // In a real app, this would generate and download reports
+    // In the completed app, this would generate and download reports
 }
 
 function contactTeacher() {
     showNotification('Opening teacher messaging...', 'info');
-    // In a real app, this would open messaging interface
+    // In the completed app, this would open messaging interface
 }
 
 function viewTransportation() {
     showNotification('Loading bus tracking...', 'info');
-    // In a real app, this would show live GPS tracking
+    // In the completed app, this would show live GPS tracking
 }
 
 function bookAppointment() {
     showNotification('Opening appointment booking...', 'info');
-    // In a real app, this would show calendar booking interface
+    // In the completed app, this would show calendar booking interface
 }
 
 function showNotifications() {
     showNotification('You have 5 new notifications', 'info');
-    // In a real app, this would show notification panel
+    // In the completed app, this would show notification panel
 }
 
 function showMessages() {
@@ -555,7 +555,7 @@ function openFullCalendar() {
     // In a real app, this would show expanded calendar
 }
 
-// Handle PRO community button
+
 document.addEventListener('DOMContentLoaded', function() {
     const proButton = document.querySelector('.pro-button');
     if (proButton) {
@@ -575,17 +575,17 @@ function updateCurrentTime() {
     const now = new Date();
     const currentHour = now.getHours();
     
-    // Update active schedule item based on current time
+   
     const scheduleItems = document.querySelectorAll('.schedule-item');
     scheduleItems.forEach((item, index) => {
         item.classList.remove('active');
-        
-        // Sample logic to highlight current class
-        const scheduleHours = [9, 10, 11, 14]; // 9AM, 10AM, 11AM, 2PM
+     //Sample Logic, Will be modified after the backend
+        const scheduleHours = [9, 10, 11, 14]; 
         if (currentHour === scheduleHours[index]) {
             item.classList.add('active');
         }
     });
 }
+
 
 
