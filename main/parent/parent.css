@@ -1,593 +1,1230 @@
-// Global variables
-let sidebarCollapsed = false;
-let mobileMenuOpen = false;
-let currentDate = new Date();
+/* Reset and Base Styles */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
 
-// DOM Elements
-const sidebar = document.getElementById('sidebar');
-const sidebarToggle = document.getElementById('sidebarToggle');
-const mainContent = document.getElementById('mainContent');
+body {
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+    background-color: #f8fafc;
+    color: #1e293b;
+    line-height: 1.6;
+}
 
-// Initialize the application
-document.addEventListener('DOMContentLoaded', function() {
-    initializeEventListeners();
-    initializeCalendar();
-    setActiveMenuItem();
-    updateWelcomeMessage();
-    initializeProgressChart();
-    loadDashboardData();
-});
+/* Dashboard Container */
+.dashboard-container {
+    display: flex;
+    min-height: 100vh;
+}
 
-// Initialize all event listeners
-function initializeEventListeners() {
-    // Sidebar toggle for desktop
-    if (sidebarToggle) {
-        sidebarToggle.addEventListener('click', toggleSidebarCollapse);
+/* Sidebar Styles */
+.sidebar {
+    width: 280px;
+    background: #ffffff;
+    box-shadow: 2px 0 10px rgba(0, 0, 0, 0.1);
+    position: fixed;
+    left: 0;
+    top: 0;
+    height: 100vh;
+    overflow-y: auto;
+    transition: all 0.3s ease;
+    z-index: 1000;
+}
+
+.sidebar.collapsed {
+    width: 70px;
+}
+
+.sidebar::-webkit-scrollbar {
+    width: 6px;
+}
+
+.sidebar::-webkit-scrollbar-track {
+    background: #f1f5f9;
+}
+
+.sidebar::-webkit-scrollbar-thumb {
+    background: #cbd5e1;
+    border-radius: 3px;
+}
+
+.sidebar::-webkit-scrollbar-thumb:hover {
+    background: #94a3b8;
+}
+
+/* Sidebar Header */
+.sidebar-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 20px;
+    border-bottom: 1px solid #e2e8f0;
+}
+
+.logo {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+}
+
+.logo-icon {
+    width: 40px;
+    height: 40px;
+    background: linear-gradient(135deg, #4f46e5, #7c3aed);
+    border-radius: 8px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: white;
+    font-weight: bold;
+    font-size: 18px;
+}
+
+.logo-text {
+    font-size: 24px;
+    font-weight: 700;
+    color: #1e293b;
+    transition: opacity 0.3s ease;
+}
+
+.sidebar.collapsed .logo-text {
+    opacity: 0;
+    width: 0;
+}
+
+.sidebar-toggle {
+    background: none;
+    border: none;
+    padding: 8px;
+    border-radius: 6px;
+    color: #64748b;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.sidebar-toggle:hover {
+    background: #f1f5f9;
+    color: #4f46e5;
+}
+
+.sidebar.collapsed .sidebar-toggle {
+    display: none;
+}
+
+/* Sidebar Menu */
+.sidebar-menu {
+    padding: 20px 0;
+}
+
+.menu-item {
+    margin: 4px 0;
+}
+
+.menu-link {
+    display: flex;
+    align-items: center;
+    padding: 12px 20px;
+    color: #64748b;
+    text-decoration: none;
+    transition: all 0.3s ease;
+    cursor: pointer;
+    position: relative;
+}
+
+.menu-link:hover {
+    background: #f8fafc;
+    color: #4f46e5;
+}
+
+.menu-item.active .menu-link {
+    background: linear-gradient(135deg, #4f46e5, #7c3aed);
+    color: white;
+    border-radius: 0 25px 25px 0;
+    margin-right: 20px;
+}
+
+.menu-link i {
+    min-width: 20px;
+    margin-right: 12px;
+    font-size: 16px;
+}
+
+.menu-text {
+    flex: 1;
+    font-weight: 500;
+    transition: opacity 0.3s ease;
+}
+
+.sidebar.collapsed .menu-text {
+    opacity: 0;
+    width: 0;
+}
+
+.expand-icon {
+    margin-left: auto;
+    margin-right: 0 !important;
+    font-size: 12px;
+    transition: transform 0.3s ease;
+}
+
+.menu-item.expanded .expand-icon {
+    transform: rotate(90deg);
+}
+
+.sidebar.collapsed .expand-icon {
+    display: none;
+}
+
+/* Submenu Styles */
+.submenu {
+    max-height: 0;
+    overflow: hidden;
+    transition: max-height 0.3s ease;
+    background: #f8fafc;
+}
+
+.menu-item.expanded .submenu {
+    max-height: 500px;
+}
+
+.submenu-item {
+    display: flex;
+    align-items: center;
+    padding: 10px 20px 10px 52px;
+    color: #64748b;
+    text-decoration: none;
+    font-size: 14px;
+    transition: all 0.3s ease;
+}
+
+.submenu-item:hover {
+    background: #e2e8f0;
+    color: #4f46e5;
+}
+
+.submenu-item.active {
+    background: linear-gradient(135deg, #4f46e5, #7c3aed);
+    color: white;
+    border-radius: 0 20px 20px 0;
+    margin-right: 20px;
+}
+
+.submenu-item i {
+    min-width: 16px;
+    margin-right: 8px;
+    font-size: 12px;
+}
+
+.sidebar.collapsed .submenu {
+    display: none;
+}
+
+/* PRO Promotion */
+.pro-promotion {
+    margin: 20px 0;
+    padding: 0 20px;
+}
+
+.pro-banner {
+    background: linear-gradient(135deg, #059669, #10b981);
+    border-radius: 12px;
+    padding: 20px;
+    color: white;
+    text-align: center;
+}
+
+.pro-content h4 {
+    font-size: 16px;
+    margin-bottom: 8px;
+}
+
+.pro-content p {
+    font-size: 12px;
+    opacity: 0.9;
+    margin-bottom: 12px;
+}
+
+.pro-button {
+    background: rgba(255, 255, 255, 0.2);
+    border: 1px solid rgba(255, 255, 255, 0.3);
+    color: white;
+    padding: 8px 16px;
+    border-radius: 6px;
+    font-size: 12px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.pro-button:hover {
+    background: rgba(255, 255, 255, 0.3);
+}
+
+.sidebar.collapsed .pro-promotion {
+    display: none;
+}
+
+/* Main Content */
+.main-content {
+    flex: 1;
+    margin-left: 280px;
+    transition: margin-left 0.3s ease;
+    min-height: 100vh;
+    background: #f8fafc;
+}
+
+.sidebar.collapsed ~ .main-content {
+    margin-left: 70px;
+}
+
+/* Header */
+.header {
+    background: white;
+    padding: 16px 24px;
+    border-bottom: 1px solid #e2e8f0;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    position: sticky;
+    top: 0;
+    z-index: 100;
+}
+
+.header-left {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+}
+
+.mobile-menu-toggle {
+    display: none;
+    background: none;
+    border: none;
+    font-size: 18px;
+    color: #64748b;
+    cursor: pointer;
+    padding: 8px;
+}
+
+.search-box {
+    display: flex;
+    align-items: center;
+    background: #f8fafc;
+    border: 1px solid #e2e8f0;
+    border-radius: 8px;
+    padding: 8px 12px;
+    min-width: 300px;
+}
+
+.search-box i {
+    color: #94a3b8;
+    margin-right: 8px;
+}
+
+.search-box input {
+    border: none;
+    background: none;
+    outline: none;
+    flex: 1;
+    font-size: 14px;
+}
+
+.header-right {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+}
+
+.mobile-app-btn {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 10px 16px;
+    border: none;
+    border-radius: 8px;
+    font-size: 12px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    background: #4f46e5;
+    color: white;
+}
+
+.mobile-app-btn:hover {
+    background: #3730a3;
+}
+
+.notification-btn, .message-btn {
+    position: relative;
+    background: none;
+    border: none;
+    padding: 10px;
+    border-radius: 8px;
+    color: #64748b;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.notification-btn:hover, .message-btn:hover {
+    background: #f8fafc;
+    color: #4f46e5;
+}
+
+.notification-badge, .message-badge {
+    position: absolute;
+    top: 4px;
+    right: 4px;
+    background: #ef4444;
+    color: white;
+    font-size: 10px;
+    padding: 2px 6px;
+    border-radius: 10px;
+    min-width: 18px;
+    text-align: center;
+}
+
+.message-badge {
+    background: #059669;
+}
+
+.user-profile {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+}
+
+.user-avatar {
+    font-size: 24px;
+    color: #4f46e5;
+}
+
+.child-select {
+    border: none;
+    background: none;
+    font-size: 14px;
+    font-weight: 500;
+    color: #1e293b;
+    cursor: pointer;
+    max-width: 200px;
+}
+
+/* Dashboard Content */
+.dashboard-content {
+    padding: 24px;
+}
+
+/* Welcome Section */
+.welcome-section {
+    margin-bottom: 24px;
+}
+
+.welcome-card {
+    background: linear-gradient(135deg, #fef3c7, #fde68a);
+    border-radius: 16px;
+    padding: 32px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.welcome-content h2 {
+    font-size: 28px;
+    font-weight: 700;
+    color: #92400e;
+    margin-bottom: 8px;
+}
+
+.welcome-content p {
+    color: #92400e;
+    margin-bottom: 20px;
+    font-size: 16px;
+}
+
+.quick-actions {
+    display: flex;
+    gap: 12px;
+    flex-wrap: wrap;
+}
+
+.quick-btn {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 10px 16px;
+    background: rgba(255, 255, 255, 0.3);
+    border: 1px solid rgba(146, 64, 14, 0.3);
+    color: #92400e;
+    border-radius: 8px;
+    font-size: 14px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.quick-btn:hover {
+    background: rgba(255, 255, 255, 0.5);
+    transform: translateY(-2px);
+}
+
+.welcome-illustration {
+    font-size: 64px;
+    color: #d97706;
+}
+
+/* Stats Grid */
+.stats-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    gap: 20px;
+    margin-bottom: 24px;
+}
+
+.stat-card {
+    background: white;
+    border-radius: 16px;
+    padding: 24px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
+    display: flex;
+    align-items: center;
+    gap: 20px;
+    transition: transform 0.3s ease;
+    position: relative;
+}
+
+.stat-card:hover {
+    transform: translateY(-2px);
+}
+
+.attendance-card {
+    border-left: 4px solid #059669;
+}
+
+.grade-card {
+    border-left: 4px solid #f59e0b;
+}
+
+.homework-card {
+    border-left: 4px solid #3b82f6;
+}
+
+.fees-card {
+    border-left: 4px solid #8b5cf6;
+}
+
+.stat-icon {
+    width: 60px;
+    height: 60px;
+    background: #f8fafc;
+    border-radius: 12px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 24px;
+    color: #4f46e5;
+}
+
+.attendance-card .stat-icon {
+    background: #ecfdf5;
+    color: #059669;
+}
+
+.grade-card .stat-icon {
+    background: #fffbeb;
+    color: #f59e0b;
+}
+
+.homework-card .stat-icon {
+    background: #eff6ff;
+    color: #3b82f6;
+}
+
+.fees-card .stat-icon {
+    background: #f3f4f6;
+    color: #8b5cf6;
+}
+
+.stat-content {
+    flex: 1;
+}
+
+.stat-number {
+    font-size: 36px;
+    font-weight: 700;
+    line-height: 1;
+    margin-bottom: 4px;
+    color: #1e293b;
+}
+
+.stat-label {
+    font-size: 16px;
+    font-weight: 600;
+    margin-bottom: 4px;
+    color: #64748b;
+}
+
+.stat-period {
+    font-size: 14px;
+    color: #94a3b8;
+}
+
+.stat-trend {
+    position: absolute;
+    top: 16px;
+    right: 16px;
+    display: flex;
+    align-items: center;
+    gap: 4px;
+    font-size: 12px;
+    font-weight: 600;
+    padding: 4px 8px;
+    border-radius: 12px;
+}
+
+.stat-trend.positive {
+    background: #ecfdf5;
+    color: #059669;
+}
+
+.stat-trend.negative {
+    background: #fef2f2;
+    color: #dc2626;
+}
+
+.stat-trend.neutral {
+    background: #f8fafc;
+    color: #64748b;
+}
+
+/* Dashboard Widgets */
+.dashboard-widgets {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+    gap: 24px;
+}
+
+.widget-card {
+    background: white;
+    border-radius: 16px;
+    padding: 24px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
+    transition: transform 0.3s ease;
+}
+
+.widget-card:hover {
+    transform: translateY(-2px);
+}
+
+.widget-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 20px;
+}
+
+.widget-header h3 {
+    font-size: 18px;
+    font-weight: 700;
+    color: #1e293b;
+}
+
+.date-badge {
+    background: #f1f5f9;
+    color: #64748b;
+    padding: 4px 12px;
+    border-radius: 12px;
+    font-size: 12px;
+    font-weight: 600;
+}
+
+/* Schedule Widget */
+.schedule-timeline {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+}
+
+.schedule-item {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    padding: 16px;
+    background: #f8fafc;
+    border-radius: 12px;
+    transition: all 0.3s ease;
+}
+
+.schedule-item.active {
+    background: linear-gradient(135deg, #4f46e5, #7c3aed);
+    color: white;
+}
+
+.schedule-item:hover {
+    transform: translateX(4px);
+}
+
+.schedule-time {
+    font-size: 14px;
+    font-weight: 600;
+    min-width: 80px;
+}
+
+.schedule-details {
+    flex: 1;
+}
+
+.schedule-details h4 {
+    font-size: 16px;
+    font-weight: 600;
+    margin-bottom: 4px;
+}
+
+.schedule-details p {
+    font-size: 14px;
+    opacity: 0.8;
+}
+
+.schedule-status {
+    width: 32px;
+    height: 32px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 14px;
+}
+
+.schedule-status.current {
+    background: rgba(255, 255, 255, 0.2);
+    color: white;
+}
+
+.schedule-status.upcoming {
+    background: #e2e8f0;
+    color: #64748b;
+}
+
+/* Progress Widget */
+.progress-chart {
+    height: 200px;
+    margin-bottom: 20px;
+    background: #f8fafc;
+    border-radius: 12px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: #64748b;
+}
+
+.period-select {
+    border: 1px solid #e2e8f0;
+    border-radius: 8px;
+    padding: 6px 12px;
+    font-size: 14px;
+    background: white;
+    cursor: pointer;
+}
+
+.subject-progress {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+}
+
+.subject-item {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+}
+
+.subject-name {
+    font-size: 14px;
+    font-weight: 600;
+    color: #374151;
+    min-width: 100px;
+}
+
+.progress-bar {
+    flex: 1;
+    height: 8px;
+    background: #e5e7eb;
+    border-radius: 4px;
+    overflow: hidden;
+}
+
+.progress-fill {
+    height: 100%;
+    background: linear-gradient(90deg, #4f46e5, #7c3aed);
+    border-radius: 4px;
+    transition: width 0.3s ease;
+}
+
+.subject-grade {
+    font-size: 14px;
+    font-weight: 700;
+    color: #059669;
+    min-width: 30px;
+    text-align: right;
+}
+
+/* Activity Widget */
+.activity-list {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+}
+
+.activity-item {
+    display: flex;
+    align-items: flex-start;
+    gap: 16px;
+    padding: 16px;
+    background: #f8fafc;
+    border-radius: 12px;
+    transition: all 0.3s ease;
+}
+
+.activity-item:hover {
+    background: #f1f5f9;
+    transform: translateX(4px);
+}
+
+.activity-icon {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 16px;
+    flex-shrink: 0;
+}
+
+.activity-icon.homework {
+    background: #eff6ff;
+    color: #3b82f6;
+}
+
+.activity-icon.grade {
+    background: #fffbeb;
+    color: #f59e0b;
+}
+
+.activity-icon.event {
+    background: #f3f4f6;
+    color: #8b5cf6;
+}
+
+.activity-icon.achievement {
+    background: #ecfdf5;
+    color: #059669;
+}
+
+.activity-details h4 {
+    font-size: 14px;
+    font-weight: 600;
+    color: #1e293b;
+    margin-bottom: 4px;
+}
+
+.activity-details p {
+    font-size: 14px;
+    color: #64748b;
+    margin-bottom: 8px;
+}
+
+.activity-time {
+    font-size: 12px;
+    color: #94a3b8;
+    font-weight: 500;
+}
+
+.view-all-btn {
+    background: none;
+    border: none;
+    color: #4f46e5;
+    font-size: 14px;
+    font-weight: 600;
+    cursor: pointer;
+    padding: 4px 8px;
+    border-radius: 4px;
+    transition: all 0.3s ease;
+}
+
+.view-all-btn:hover {
+    background: #f1f5f9;
+}
+
+/* Events Widget */
+.events-list {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+}
+
+.event-item {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    padding: 16px;
+    background: #f8fafc;
+    border-radius: 12px;
+    transition: all 0.3s ease;
+}
+
+.event-item:hover {
+    background: #f1f5f9;
+    transform: translateY(-2px);
+}
+
+.event-date {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    background: #4f46e5;
+    color: white;
+    border-radius: 12px;
+    padding: 12px;
+    min-width: 60px;
+    flex-shrink: 0;
+}
+
+.date-number {
+    font-size: 20px;
+    font-weight: 700;
+    line-height: 1;
+}
+
+.date-month {
+    font-size: 12px;
+    font-weight: 600;
+    opacity: 0.9;
+}
+
+.event-details {
+    flex: 1;
+}
+
+.event-details h4 {
+    font-size: 16px;
+    font-weight: 600;
+    color: #1e293b;
+    margin-bottom: 8px;
+}
+
+.event-details p {
+    font-size: 14px;
+    color: #64748b;
+    margin-bottom: 4px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.event-action-btn {
+    background: none;
+    border: 1px solid #e2e8f0;
+    width: 36px;
+    height: 36px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: #64748b;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.event-action-btn:hover {
+    background: #4f46e5;
+    border-color: #4f46e5;
+    color: white;
+}
+
+.calendar-btn {
+    background: none;
+    border: none;
+    color: #4f46e5;
+    font-size: 16px;
+    cursor: pointer;
+    padding: 8px;
+    border-radius: 6px;
+    transition: all 0.3s ease;
+}
+
+.calendar-btn:hover {
+    background: #f1f5f9;
+}
+
+/* Quick Actions Widget */
+.actions-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 12px;
+}
+
+.action-btn {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 8px;
+    padding: 20px 16px;
+    background: #f8fafc;
+    border: 1px solid #e2e8f0;
+    border-radius: 12px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    text-decoration: none;
+    color: #64748b;
+}
+
+.action-btn:hover {
+    background: #4f46e5;
+    color: white;
+    transform: translateY(-2px);
+}
+
+.action-btn i {
+    font-size: 20px;
+}
+
+.action-btn span {
+    font-size: 12px;
+    font-weight: 600;
+    text-align: center;
+}
+
+/* Calendar Widget */
+.calendar-widget {
+    grid-column: span 1;
+}
+
+.calendar-nav {
+    background: none;
+    border: none;
+    color: #64748b;
+    cursor: pointer;
+    padding: 8px;
+    border-radius: 6px;
+    transition: all 0.3s ease;
+}
+
+.calendar-nav:hover {
+    background: #f3f4f6;
+    color: #4f46e5;
+}
+
+.calendar-days {
+    display: grid;
+    grid-template-columns: repeat(7, 1fr);
+    gap: 4px;
+    margin-bottom: 8px;
+}
+
+.day-header {
+    text-align: center;
+    font-size: 12px;
+    font-weight: 600;
+    color: #6b7280;
+    padding: 8px 4px;
+}
+
+.calendar-body {
+    display: grid;
+    grid-template-columns: repeat(7, 1fr);
+    gap: 4px;
+}
+
+.calendar-day {
+    aspect-ratio: 1;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 12px;
+    font-weight: 500;
+    border-radius: 6px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    color: #374151;
+}
+
+.calendar-day:hover {
+    background: #f3f4f6;
+}
+
+.calendar-day.other-month {
+    color: #d1d5db;
+}
+
+.calendar-day.today {
+    background: #4f46e5;
+    color: white;
+    font-weight: 600;
+}
+
+.calendar-day.selected {
+    background: #059669;
+    color: white;
+}
+
+.calendar-day.has-event {
+    background: #fef3c7;
+    color: #92400e;
+}
+
+/* Responsive Design */
+@media (max-width: 1200px) {
+    .dashboard-widgets {
+        grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
     }
     
-    // Mobile menu toggle
-    const mobileToggle = document.querySelector('.mobile-menu-toggle');
-    if (mobileToggle) {
-        mobileToggle.addEventListener('click', toggleSidebar);
-    }
-    
-    // Close sidebar when clicking outside on mobile
-    document.addEventListener('click', function(e) {
-        if (window.innerWidth <= 768) {
-            if (!sidebar.contains(e.target) && !e.target.classList.contains('mobile-menu-toggle')) {
-                closeMobileSidebar();
-            }
-        }
-    });
-    
-    // Handle window resize
-    window.addEventListener('resize', handleResize);
-    
-    // Add click handlers for menu items
-    addMenuItemClickHandlers();
-    
-    // Initialize search functionality
-    initializeSearch();
-}
-
-// Toggle sidebar collapse (desktop)
-function toggleSidebarCollapse() {
-    sidebarCollapsed = !sidebarCollapsed;
-    sidebar.classList.toggle('collapsed', sidebarCollapsed);
-    
-    // Close all submenus when collapsing
-    if (sidebarCollapsed) {
-        const expandedItems = document.querySelectorAll('.menu-item.expanded');
-        expandedItems.forEach(item => {
-            item.classList.remove('expanded');
-        });
+    .actions-grid {
+        grid-template-columns: repeat(3, 1fr);
     }
 }
 
-// Toggle sidebar for mobile
-function toggleSidebar() {
-    if (window.innerWidth <= 768) {
-        mobileMenuOpen = !mobileMenuOpen;
-        sidebar.classList.toggle('mobile-open', mobileMenuOpen);
-        document.body.style.overflow = mobileMenuOpen ? 'hidden' : 'auto';
+@media (max-width: 1024px) {
+    .stats-grid {
+        grid-template-columns: repeat(2, 1fr);
+    }
+    
+    .dashboard-widgets {
+        grid-template-columns: 1fr;
+    }
+    
+    .quick-actions {
+        justify-content: center;
     }
 }
 
-// Close mobile sidebar
-function closeMobileSidebar() {
-    if (mobileMenuOpen) {
-        mobileMenuOpen = false;
-        sidebar.classList.remove('mobile-open');
-        document.body.style.overflow = 'auto';
+@media (max-width: 768px) {
+    .sidebar {
+        transform: translateX(-100%);
+        width: 280px;
+    }
+    
+    .sidebar.mobile-open {
+        transform: translateX(0);
+    }
+    
+    .main-content {
+        margin-left: 0;
+    }
+    
+    .mobile-menu-toggle {
+        display: block;
+    }
+    
+    .search-box {
+        display: none;
+    }
+    
+    .mobile-app-btn {
+        display: none;
+    }
+    
+    .header-right {
+        gap: 8px;
+    }
+    
+    .stats-grid {
+        grid-template-columns: 1fr;
+    }
+    
+    .dashboard-content {
+        padding: 16px;
+    }
+    
+    .welcome-card {
+        flex-direction: column;
+        text-align: center;
+        gap: 20px;
+    }
+    
+    .quick-actions {
+        justify-content: center;
+        width: 100%;
+    }
+    
+    .quick-btn {
+        font-size: 12px;
+        padding: 8px 12px;
+    }
+    
+    .welcome-illustration {
+        font-size: 48px;
+    }
+    
+    .actions-grid {
+        grid-template-columns: repeat(2, 1fr);
     }
 }
 
-// Handle window resize
-function handleResize() {
-    if (window.innerWidth > 768) {
-        // Reset mobile menu state on desktop
-        mobileMenuOpen = false;
-        sidebar.classList.remove('mobile-open');
-        document.body.style.overflow = 'auto';
-    } else {
-        // Reset collapse state on mobile
-        sidebarCollapsed = false;
-        sidebar.classList.remove('collapsed');
+@media (max-width: 640px) {
+    .stat-card {
+        flex-direction: column;
+        text-align: center;
+        gap: 16px;
+    }
+    
+    .stat-icon {
+        width: 50px;
+        height: 50px;
+        font-size: 20px;
+    }
+    
+    .stat-number {
+        font-size: 28px;
+    }
+    
+    .schedule-item {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 12px;
+    }
+    
+    .event-item {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 12px;
+    }
+    
+    .activity-item {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 12px;
     }
 }
 
-// Toggle submenu expansion
-function toggleSubmenu(element) {
-    // Don't expand submenus when sidebar is collapsed
-    if (sidebarCollapsed) {
-        return;
-    }
-    
-    const menuItem = element.closest('.menu-item');
-    const isExpanded = menuItem.classList.contains('expanded');
-    
-    // Close all other expanded submenus
-    const allMenuItems = document.querySelectorAll('.menu-item.expanded');
-    allMenuItems.forEach(item => {
-        if (item !== menuItem) {
-            item.classList.remove('expanded');
-        }
-    });
-    
-    // Toggle current submenu
-    menuItem.classList.toggle('expanded', !isExpanded);
+/* Utility Classes */
+.text-success {
+    color: #059669 !important;
 }
 
-// Add click handlers for menu items
-function addMenuItemClickHandlers() {
-    // Handle regular menu links
-    const menuLinks = document.querySelectorAll('.menu-link[href]');
-    menuLinks.forEach(link => {
-        link.addEventListener('click', function(e) {
-            e.preventDefault();
-            setActiveMenuItem(this);
-            handleNavigation(this.getAttribute('href'));
-            
-            // Close mobile menu after selection
-            if (window.innerWidth <= 768) {
-                closeMobileSidebar();
-            }
-        });
-    });
-    
-    // Handle submenu links
-    const submenuLinks = document.querySelectorAll('.submenu-item');
-    submenuLinks.forEach(link => {
-        link.addEventListener('click', function(e) {
-            e.preventDefault();
-            setActiveSubmenuItem(this);
-            handleNavigation(this.getAttribute('href'));
-            
-            // Close mobile menu after selection
-            if (window.innerWidth <= 768) {
-                closeMobileSidebar();
-            }
-        });
-    });
+.text-warning {
+    color: #f59e0b !important;
 }
 
-// Set active menu item
-function setActiveMenuItem(clickedItem = null) {
-    // Remove active class from all menu items
-    const allMenuItems = document.querySelectorAll('.menu-item');
-    allMenuItems.forEach(item => {
-        item.classList.remove('active');
-    });
-    
-    // Remove active class from all submenu items
-    const allSubmenuItems = document.querySelectorAll('.submenu-item');
-    allSubmenuItems.forEach(item => {
-        item.classList.remove('active');
-    });
-    
-    if (clickedItem) {
-        // Add active class to clicked menu item
-        const parentMenuItem = clickedItem.closest('.menu-item');
-        if (parentMenuItem) {
-            parentMenuItem.classList.add('active');
-        }
-    } else {
-        // Set Dashboard as active by default
-        const dashboardItem = document.querySelector('.menu-item');
-        if (dashboardItem) {
-            dashboardItem.classList.add('active');
-        }
-    }
+.text-error {
+    color: #dc2626 !important;
 }
 
-// Set active submenu item
-function setActiveSubmenuItem(clickedItem) {
-    // Remove active class from all menu items and submenu items
-    const allMenuItems = document.querySelectorAll('.menu-item');
-    allMenuItems.forEach(item => {
-        item.classList.remove('active');
-    });
-    
-    const allSubmenuItems = document.querySelectorAll('.submenu-item');
-    allSubmenuItems.forEach(item => {
-        item.classList.remove('active');
-    });
-    
-    // Add active class to clicked submenu item
-    clickedItem.classList.add('active');
-    
-    // Add active class to parent menu item
-    const parentMenuItem = clickedItem.closest('.menu-item');
-    if (parentMenuItem) {
-        parentMenuItem.classList.add('active');
-        parentMenuItem.classList.add('expanded');
-    }
+.text-info {
+    color: #3b82f6 !important;
 }
 
-// Handle navigation
-function handleNavigation(route) {
-    console.log('Navigating to:', route);
-    // In a real application, this would handle routing
-    showNotification(`Navigating to ${route}`, 'info');
+.bg-success {
+    background-color: #ecfdf5 !important;
 }
 
-// Initialize search functionality
-function initializeSearch() {
-    const searchInput = document.querySelector('.search-box input');
-    if (searchInput) {
-        searchInput.addEventListener('input', function(e) {
-            const searchTerm = e.target.value.toLowerCase();
-            if (searchTerm.length > 0) {
-                searchMenuItems(searchTerm);
-            } else {
-                resetMenuSearch();
-            }
-        });
-    }
+.bg-warning {
+    background-color: #fffbeb !important;
 }
 
-// Search through menu items
-function searchMenuItems(searchTerm) {
-    const menuItems = document.querySelectorAll('.menu-item');
-    const submenuItems = document.querySelectorAll('.submenu-item');
-    
-    menuItems.forEach(item => {
-        const menuText = item.querySelector('.menu-text');
-        const menuLink = item.querySelector('.menu-link');
-        
-        if (menuText && menuLink) {
-            const text = menuText.textContent.toLowerCase();
-            const isMatch = text.includes(searchTerm);
-            
-            item.style.display = isMatch ? 'block' : 'none';
-            
-            // If parent matches, show all children
-            if (isMatch && item.classList.contains('has-submenu')) {
-                item.classList.add('expanded');
-            }
-        }
-    });
-    
-    submenuItems.forEach(item => {
-        const text = item.textContent.toLowerCase();
-        const isMatch = text.includes(searchTerm);
-        const parentMenuItem = item.closest('.menu-item');
-        
-        item.style.display = isMatch ? 'flex' : 'none';
-        
-        // If child matches, show parent and expand it
-        if (isMatch && parentMenuItem) {
-            parentMenuItem.style.display = 'block';
-            parentMenuItem.classList.add('expanded');
-        }
-    });
+.bg-error {
+    background-color: #fef2f2 !important;
 }
 
-// Reset menu search
-function resetMenuSearch() {
-    const menuItems = document.querySelectorAll('.menu-item');
-    const submenuItems = document.querySelectorAll('.submenu-item');
-    
-    menuItems.forEach(item => {
-        item.style.display = 'block';
-        if (!item.classList.contains('pro-promotion')) {
-            item.classList.remove('expanded');
-        }
-    });
-    
-    submenuItems.forEach(item => {
-        item.style.display = 'flex';
-    });
-}
-
-// Calendar functionality
-function initializeCalendar() {
-    updateCalendar();
-    
-    const prevBtn = document.getElementById('prevMonth');
-    const nextBtn = document.getElementById('nextMonth');
-    
-    if (prevBtn) {
-        prevBtn.addEventListener('click', () => {
-            currentDate.setMonth(currentDate.getMonth() - 1);
-            updateCalendar();
-        });
-    }
-    
-    if (nextBtn) {
-        nextBtn.addEventListener('click', () => {
-            currentDate.setMonth(currentDate.getMonth() + 1);
-            updateCalendar();
-        });
-    }
-}
-
-function updateCalendar() {
-    const monthNames = [
-        'January', 'February', 'March', 'April', 'May', 'June',
-        'July', 'August', 'September', 'October', 'November', 'December'
-    ];
-    
-    const currentMonthElement = document.getElementById('currentMonth');
-    const calendarGrid = document.getElementById('calendarGrid');
-    
-    if (!currentMonthElement || !calendarGrid) return;
-    
-    // Update month/year display
-    currentMonthElement.textContent = `${monthNames[currentDate.getMonth()]} ${currentDate.getFullYear()}`;
-    
-    // Clear previous calendar
-    calendarGrid.innerHTML = '';
-    
-    // Get first day of month and number of days
-    const firstDay = new Date(currentDate.getFullYear(), currentDate.getMonth(), 1);
-    const lastDay = new Date(currentDate.getFullYear(), currentDate.getMonth() + 1, 0);
-    const startDate = new Date(firstDay);
-    startDate.setDate(startDate.getDate() - firstDay.getDay());
-    
-    // Generate calendar days
-    const today = new Date();
-    const eventDates = [20, 22]; // Sample event dates
-    
-    for (let i = 0; i < 42; i++) {
-        const date = new Date(startDate);
-        date.setDate(startDate.getDate() + i);
-        
-        const dayElement = document.createElement('div');
-        dayElement.className = 'calendar-day';
-        dayElement.textContent = date.getDate();
-        
-        // Add classes for styling
-        if (date.getMonth() !== currentDate.getMonth()) {
-            dayElement.classList.add('other-month');
-        }
-        
-        if (date.toDateString() === today.toDateString()) {
-            dayElement.classList.add('today');
-        }
-        
-        if (eventDates.includes(date.getDate()) && date.getMonth() === currentDate.getMonth()) {
-            dayElement.classList.add('has-event');
-        }
-        
-        // Add click handler
-        dayElement.addEventListener('click', () => {
-            document.querySelectorAll('.calendar-day.selected').forEach(el => {
-                el.classList.remove('selected');
-            });
-            if (!dayElement.classList.contains('other-month')) {
-                dayElement.classList.add('selected');
-                showNotification(`Selected date: ${date.toLocaleDateString()}`, 'info');
-            }
-        });
-        
-        calendarGrid.appendChild(dayElement);
-    }
-}
-
-// Update welcome message
-function updateWelcomeMessage() {
-    const now = new Date();
-    const hour = now.getHours();
-    let greeting = 'Good morning';
-    
-    if (hour >= 12 && hour < 17) {
-        greeting = 'Good afternoon';
-    } else if (hour >= 17) {
-        greeting = 'Good evening';
-    }
-    
-    // This would normally get the parent name from user data
-    const welcomeTitle = document.querySelector('.welcome-content h2');
-    if (welcomeTitle) {
-        welcomeTitle.textContent = `${greeting}, Mrs. Johnson!`;
-    }
-}
-
-// Initialize progress chart
-function initializeProgressChart() {
-    const chartContainer = document.querySelector('.progress-chart');
-    if (chartContainer) {
-        // This is a placeholder for the chart
-        chartContainer.innerHTML = `
-            <div style="text-align: center; color: #64748b;">
-                <i class="fas fa-chart-line" style="font-size: 48px; margin-bottom: 12px; display: block;"></i>
-                <p>Academic Progress Chart</p>
-                <p style="font-size: 12px; opacity: 0.7;">Performance tracking visualization</p>
-            </div>
-        `;
-    }
-}
-
-// Load dashboard data
-function loadDashboardData() {
-    // Simulate loading data
-    setTimeout(() => {
-        updateStatistics({
-            attendance: 95,
-            attendanceTrend: '+2%',
-            overallGrade: 'A-',
-            gradeTrend: 'Improved',
-            pendingTasks: 3,
-            taskTrend: 'On Track',
-            dueFees: 0,
-            feesTrend: 'Paid'
-        });
-    }, 1000);
-}
-
-// Update statistics
-function updateStatistics(data) {
-    if (!data) return;
-    
-    // Update attendance
-    const attendanceCard = document.querySelector('.attendance-card');
-    if (attendanceCard && data.attendance !== undefined) {
-        const numberEl = attendanceCard.querySelector('.stat-number');
-        const trendEl = attendanceCard.querySelector('.stat-trend');
-        if (numberEl) numberEl.textContent = `${data.attendance}%`;
-        if (trendEl) trendEl.textContent = data.attendanceTrend;
-    }
-    
-    // Update grade
-    const gradeCard = document.querySelector('.grade-card');
-    if (gradeCard && data.overallGrade !== undefined) {
-        const numberEl = gradeCard.querySelector('.stat-number');
-        const trendEl = gradeCard.querySelector('.stat-trend');
-        if (numberEl) numberEl.textContent = data.overallGrade;
-        if (trendEl) trendEl.textContent = data.gradeTrend;
-    }
-    
-    // Update homework
-    const homeworkCard = document.querySelector('.homework-card');
-    if (homeworkCard && data.pendingTasks !== undefined) {
-        const numberEl = homeworkCard.querySelector('.stat-number');
-        const trendEl = homeworkCard.querySelector('.stat-trend');
-        if (numberEl) numberEl.textContent = data.pendingTasks;
-        if (trendEl) trendEl.textContent = data.taskTrend;
-    }
-    
-    // Update fees
-    const feesCard = document.querySelector('.fees-card');
-    if (feesCard && data.dueFees !== undefined) {
-        const numberEl = feesCard.querySelector('.stat-number');
-        const trendEl = feesCard.querySelector('.stat-trend');
-        if (numberEl) numberEl.textContent = `$${data.dueFees}`;
-        if (trendEl) trendEl.textContent = data.feesTrend;
-    }
-}
-
-// Notification system
-function showNotification(message, type = 'info') {
-    // Create notification element
-    const notification = document.createElement('div');
-    notification.className = `notification notification-${type}`;
-    notification.style.cssText = `
-        position: fixed;
-        top: 20px;
-        right: 20px;
-        padding: 16px 20px;
-        background: ${getNotificationColor(type)};
-        color: white;
-        border-radius: 8px;
-        box-shadow: 0 4px 12px rgba(0,0,0,0.15);
-        z-index: 10000;
-        transform: translateX(400px);
-        transition: transform 0.3s ease;
-        max-width: 300px;
-    `;
-    notification.textContent = message;
-    
-    document.body.appendChild(notification);
-    
-    // Animate in
-    setTimeout(() => {
-        notification.style.transform = 'translateX(0)';
-    }, 100);
-    
-    // Remove after 3 seconds
-    setTimeout(() => {
-        notification.style.transform = 'translateX(400px)';
-        setTimeout(() => {
-            if (document.body.contains(notification)) {
-                document.body.removeChild(notification);
-            }
-        }, 300);
-    }, 3000);
-}
-
-function getNotificationColor(type) {
-    switch(type) {
-        case 'success': return '#059669';
-        case 'error': return '#dc2626';
-        case 'warning': return '#f59e0b';
-        default: return '#4f46e5';
-    }
-}
-
-// Navigation functions for quick actions
-function navigateTo(section) {
-    console.log(`Navigating to ${section}`);
-    showNotification(`Opening ${section} section...`, 'info');
-    
-    // Here you would implement actual navigation
-    // For now, we'll just show a notification
-}
-
-function requestLeave() {
-    showNotification('Opening leave request form...', 'info');
-    // In a real app, this would open a modal or navigate to leave request page
-}
-
-function payFees() {
-    showNotification('Redirecting to payment gateway...', 'info');
-    // In a real app, this would integrate with payment system
-}
-
-function downloadReports() {
-    showNotification('Preparing report download...', 'info');
-    // In a real app, this would generate and download reports
-}
-
-function contactTeacher() {
-    showNotification('Opening teacher messaging...', 'info');
-    // In a real app, this would open messaging interface
-}
-
-function viewTransportation() {
-    showNotification('Loading bus tracking...', 'info');
-    // In a real app, this would show live GPS tracking
-}
-
-function bookAppointment() {
-    showNotification('Opening appointment booking...', 'info');
-    // In a real app, this would show calendar booking interface
-}
-
-function showNotifications() {
-    showNotification('You have 5 new notifications', 'info');
-    // In a real app, this would show notification panel
-}
-
-function showMessages() {
-    showNotification('You have 2 new messages', 'info');
-    // In a real app, this would show messages panel
-}
-
-function openFullCalendar() {
-    showNotification('Opening full calendar view...', 'info');
-    // In a real app, this would show expanded calendar
-}
-
-// Handle PRO community button
-document.addEventListener('DOMContentLoaded', function() {
-    const proButton = document.querySelector('.pro-button');
-    if (proButton) {
-        proButton.addEventListener('click', function() {
-            showNotification('Welcome to Parent Community! Connect with other parents and share experiences.', 'success');
-        });
-    }
-});
-
-// Simulate real-time updates
-setInterval(() => {
-    // Update time in schedule if needed
-    updateCurrentTime();
-}, 60000); // Update every minute
-
-function updateCurrentTime() {
-    const now = new Date();
-    const currentHour = now.getHours();
-    
-    // Update active schedule item based on current time
-    const scheduleItems = document.querySelectorAll('.schedule-item');
-    scheduleItems.forEach((item, index) => {
-        item.classList.remove('active');
-        
-        // Sample logic to highlight current class
-        const scheduleHours = [9, 10, 11, 14]; // 9AM, 10AM, 11AM, 2PM
-        if (currentHour === scheduleHours[index]) {
-            item.classList.add('active');
-        }
-    });
+.bg-info {
+    background-color: #eff6ff !important;
 }
