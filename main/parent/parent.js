@@ -8,7 +8,7 @@ const sidebar = document.getElementById('sidebar');
 const sidebarToggle = document.getElementById('sidebarToggle');
 const mainContent = document.getElementById('mainContent');
 
-// Initialize the application
+// Initialize application
 document.addEventListener('DOMContentLoaded', function() {
     initializeEventListeners();
     initializeCalendar();
@@ -18,14 +18,14 @@ document.addEventListener('DOMContentLoaded', function() {
     loadDashboardData();
 });
 
-// Initialize all event listeners
+// Initialize event listeners
 function initializeEventListeners() {
     // Sidebar toggle for desktop
     if (sidebarToggle) {
         sidebarToggle.addEventListener('click', toggleSidebarCollapse);
     }
     
-    // Mobile menu toggle
+
     const mobileToggle = document.querySelector('.mobile-menu-toggle');
     if (mobileToggle) {
         mobileToggle.addEventListener('click', toggleSidebar);
@@ -40,13 +40,13 @@ function initializeEventListeners() {
         }
     });
     
-    // Handle window resize
+
     window.addEventListener('resize', handleResize);
+
     
-    // Add click handlers for menu items
     addMenuItemClickHandlers();
     
-    // Initialize search functionality
+    // Initialize search
     initializeSearch();
 }
 
@@ -85,12 +85,12 @@ function closeMobileSidebar() {
 // Handle window resize
 function handleResize() {
     if (window.innerWidth > 768) {
-        // Reset mobile menu state on desktop
+        
         mobileMenuOpen = false;
         sidebar.classList.remove('mobile-open');
         document.body.style.overflow = 'auto';
     } else {
-        // Reset collapse state on mobile
+        
         sidebarCollapsed = false;
         sidebar.classList.remove('collapsed');
     }
@@ -98,7 +98,7 @@ function handleResize() {
 
 // Toggle submenu expansion
 function toggleSubmenu(element) {
-    // Don't expand submenus when sidebar is collapsed
+    
     if (sidebarCollapsed) {
         return;
     }
@@ -106,7 +106,7 @@ function toggleSubmenu(element) {
     const menuItem = element.closest('.menu-item');
     const isExpanded = menuItem.classList.contains('expanded');
     
-    // Close all other expanded submenus
+    
     const allMenuItems = document.querySelectorAll('.menu-item.expanded');
     allMenuItems.forEach(item => {
         if (item !== menuItem) {
@@ -114,13 +114,13 @@ function toggleSubmenu(element) {
         }
     });
     
-    // Toggle current submenu
+    
     menuItem.classList.toggle('expanded', !isExpanded);
 }
 
-// Add click handlers for menu items
+
 function addMenuItemClickHandlers() {
-    // Handle regular menu links
+    
     const menuLinks = document.querySelectorAll('.menu-link[href]');
     menuLinks.forEach(link => {
         link.addEventListener('click', function(e) {
@@ -128,14 +128,14 @@ function addMenuItemClickHandlers() {
             setActiveMenuItem(this);
             handleNavigation(this.getAttribute('href'));
             
-            // Close mobile menu after selection
+        
             if (window.innerWidth <= 768) {
                 closeMobileSidebar();
             }
         });
     });
     
-    // Handle submenu links
+
     const submenuLinks = document.querySelectorAll('.submenu-item');
     submenuLinks.forEach(link => {
         link.addEventListener('click', function(e) {
@@ -143,7 +143,7 @@ function addMenuItemClickHandlers() {
             setActiveSubmenuItem(this);
             handleNavigation(this.getAttribute('href'));
             
-            // Close mobile menu after selection
+            
             if (window.innerWidth <= 768) {
                 closeMobileSidebar();
             }
@@ -151,9 +151,9 @@ function addMenuItemClickHandlers() {
     });
 }
 
-// Set active menu item
+
 function setActiveMenuItem(clickedItem = null) {
-    // Remove active class from all menu items
+    
     const allMenuItems = document.querySelectorAll('.menu-item');
     allMenuItems.forEach(item => {
         item.classList.remove('active');
@@ -591,3 +591,4 @@ function updateCurrentTime() {
         }
     });
 }
+
