@@ -62,43 +62,63 @@ EduCore combines **tradition and innovation**, supporting schools with a simple,
 ## 📂 Project Structure
 ```
 EduCore/
-│── Development/
-│   ├── server.js          # Express server entry point
-│   ├── mongodb.js         # MongoDB connection
-│   ├── package.json
-│   ├── package-lock.json
-│   │
-│   ├── public/            # Frontend files
-│   │   ├── admin.html
-│   │   ├── teacher.html
-│   │   ├── student.html
-│   │   ├── login.html
-│   │   ├── signup.html
-│   │   │
-│   │   ├── css/           # Stylesheets
-│   │   │   ├── style.css  # Global + shared styles
-│   │   │   ├── admin.css
-│   │   │   ├── teacher.css
-│   │   │   └── student.css
-│   │   │
-│   │   ├── js/            # Frontend scripts
-│   │   │   ├── auth.js    # Login/Signup logic
-│   │   │   ├── admin.js
-│   │   │   ├── teacher.js
-│   │   │   └── student.js
-│   │   │
-│   │   └── img/           # Images, logos
-│   │       └── logo.png
-│   │
-│   ├── models/            # Database models
-│   │   └── User.js        # Handles Admin, Teacher, Student roles
-│   │
-│   ├── routes/            # Express routes
-│   │   └── auth.js        # Login & signup routes
-│   │
-│   └── README.md
-│
-└── .env                   # Environment variables (DB, secrets)
+├── public/
+│   ├── index.html
+│   └── assets/
+│       ├── images/
+│       └── icons/
+├── src/
+│   ├── api/                     # API calls
+│   │   ├── authAPI.ts
+│   │   ├── studentAPI.ts
+│   │   └── teacherAPI.ts
+│   ├── components/              # Reusable UI components
+│   │   ├── Button.tsx
+│   │   ├── Card.tsx
+│   │   ├── Modal.tsx
+│   │   └── Table.tsx
+│   ├── features/                # Role-based features
+│   │   ├── admin/               # Admin panel
+│   │   │   ├── Dashboard.tsx
+│   │   │   ├── ManageTeachers.tsx
+│   │   │   ├── ManageStudents.tsx
+│   │   │   └── Reports.tsx
+│   │   ├── teacher/             # Teacher panel
+│   │   │   ├── Dashboard.tsx
+│   │   │   ├── Gradebook.tsx
+│   │   │   ├── Attendance.tsx
+│   │   │   └── Assignments.tsx
+│   │   ├── student/             # Student panel
+│   │   │   ├── Dashboard.tsx
+│   │   │   ├── Grades.tsx
+│   │   │   ├── Schedule.tsx
+│   │   │   └── Assignments.tsx
+│   │   └── parent/              # Parent panel
+│   │       ├── Dashboard.tsx
+│   │       ├── ChildGrades.tsx
+│   │       └── Attendance.tsx
+│   ├── hooks/                   # Custom React hooks
+│   │   ├── useAuth.ts
+│   │   ├── useFetch.ts
+│   │   └── useTheme.ts
+│   ├── pages/                   # Main pages/routes
+│   │   ├── Login.tsx
+│   │   ├── Signup.tsx
+│   │   └── NotFound.tsx
+│   ├── routes/                  # React Router routes
+│   │   └── AppRoutes.tsx
+│   ├── styles/                  # Global & modular CSS
+│   │   ├── globals.css
+│   │   └── theme.css
+│   ├── utils/                   # Helpers, validators
+│   │   ├── validators.ts
+│   │   └── formatters.ts
+│   ├── App.tsx
+│   └── index.tsx
+├── .env
+├── .gitignore
+└── README.md
+
 
 ```
 
