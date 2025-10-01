@@ -3,7 +3,7 @@
 
 ## 🌍 About EduCore
 EduCore is a modern, Ethiopian-inspired **School Management System** designed to help administrators, teachers, students, and parents stay connected.  
-
+Contributing is appreciated
 It streamlines and digitalizes daily school operations such as:
 - Built-in spreadsheet software for grades & ranking  
 - Attendance tracking & analytics  
