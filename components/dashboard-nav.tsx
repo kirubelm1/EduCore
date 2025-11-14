@@ -12,10 +12,12 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
-import { GraduationCap, LogOut, Settings, User } from 'lucide-react';
+import { GraduationCap, LogOut, Settings, User, Building2 } from 'lucide-react';
 import { useAuth } from "@/hooks/use-auth";
 import { signOut } from "@/lib/firebase/auth";
 import { cn } from "@/lib/utils";
+import { useState, useEffect } from "react";
+import { getSchool } from "@/lib/firebase/schools";
 
 interface NavItem {
   href: string;
@@ -32,13 +34,26 @@ export function DashboardNav({ navItems, title }: DashboardNavProps) {
   const pathname = usePathname();
   const router = useRouter();
   const { user, userData } = useAuth();
+  const [schoolName, setSchoolName] = useState<string>("");
+
+  useEffect(() => {
+    const fetchSchool = async () => {
+      if (userData?.schoolId) {
+        const school = await getSchool(userData.schoolId);
+        if (school) {
+          setSchoolName(school.name);
+        }
+      }
+    };
+    fetchSchool();
+  }, [userData?.schoolId]);
 
   const handleSignOut = async () => {
     try {
       await signOut();
       router.push("/login");
     } catch (error) {
-      console.error("Error signing out:", error);
+      console.error("[v0] Error signing out:", error);
     }
   };
 
@@ -85,17 +100,25 @@ export function DashboardNav({ navItems, title }: DashboardNavProps) {
           <DropdownMenuTrigger asChild>
             <Button variant="ghost" className="relative h-10 w-10 rounded-full">
               <Avatar>
-                <AvatarImage src={userData?.photoURL || undefined} alt={userData?.fullName} />
-                <AvatarFallback>{getInitials(userData?.fullName)}</AvatarFallback>
+                <AvatarImage src={userData?.profilePicture || undefined} alt={userData?.name} />
+                <AvatarFallback>{getInitials(userData?.name)}</AvatarFallback>
               </Avatar>
             </Button>
           </DropdownMenuTrigger>
           <DropdownMenuContent className="w-56" align="end">
             <DropdownMenuLabel>
               <div className="flex flex-col space-y-1">
-                <p className="text-sm font-medium">{userData?.fullName || "User"}</p>
+                <p className="text-sm font-medium">{userData?.name || "User"}</p>
                 <p className="text-xs text-muted-foreground">{user?.email}</p>
-                <p className="text-xs text-muted-foreground capitalize">{userData?.role}</p>
+                <p className="text-xs text-muted-foreground capitalize">
+                  {userData?.role?.replace("_", " ")}
+                </p>
+                {schoolName && (
+                  <p className="text-xs text-muted-foreground flex items-center gap-1 pt-1 border-t mt-1">
+                    <Building2 className="h-3 w-3" />
+                    {schoolName}
+                  </p>
+                )}
               </div>
             </DropdownMenuLabel>
             <DropdownMenuSeparator />

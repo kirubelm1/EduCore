@@ -28,9 +28,8 @@ export default function LoginPage() {
       
       console.log("[v0] Login successful, redirecting to:", userData.role);
       
-      // Redirect based on user role
       switch (userData.role) {
-        case "admin":
+        case "school_admin":
           router.push("/admin");
           break;
         case "teacher":
@@ -119,9 +118,9 @@ export default function LoginPage() {
         </CardContent>
         <CardFooter className="flex-col space-y-4">
           <div className="text-sm text-center text-muted-foreground">
-            Don't have an account?{" "}
-            <Link href="/signup" className="text-primary hover:underline font-semibold">
-              Sign up
+            Need an account?{" "}
+            <Link href="/register-school" className="text-primary hover:underline font-semibold">
+              Register your school
             </Link>
           </div>
           <div className="text-sm text-center text-muted-foreground">

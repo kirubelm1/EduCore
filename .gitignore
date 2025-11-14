@@ -36,11 +36,12 @@ yarn-error.log*
 *.tsbuildinfo
 next-env.d.ts
 
-# Firebase (if you have local config files)
+# Firebase
 .firebase/
 firebase-debug.log
 firestore-debug.log
 ui-debug.log
+firebase-adminsdk-*.json
 
 # IDE
 .vscode/

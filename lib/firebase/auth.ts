@@ -4,45 +4,52 @@ import {
   signOut as firebaseSignOut,
   sendPasswordResetEmail,
   updateProfile,
-  User,
   UserCredential,
 } from "firebase/auth";
-import { doc, setDoc, getDoc } from "firebase/firestore";
+import { doc, setDoc, getDoc, collection, query, where, getDocs } from "firebase/firestore";
 import { auth, db } from "./config";
 
-export type UserRole = "admin" | "teacher" | "student" | "parent";
+export type UserRole = "school_admin" | "teacher" | "student" | "parent";
+
+export interface Permission {
+  module: string; // e.g., "students", "teachers", "classes", "assignments"
+  actions: string[]; // e.g., ["create", "read", "update", "delete"]
+}
 
 export interface UserData {
   uid: string;
   email: string;
   role: UserRole;
+  schoolId: string; // Added schoolId for multi-tenant support
   name: string;
   phoneNumber?: string;
   profilePicture?: string;
+  permissions?: Permission[]; // Added custom permissions for RBAC
   createdAt: Date;
+  updatedAt: Date;
 }
 
-// Sign up with email and password
 export async function signUp(
   email: string,
   password: string,
   name: string,
-  role: UserRole
+  role: UserRole,
+  schoolId: string
 ): Promise<UserCredential> {
   try {
     const userCredential = await createUserWithEmailAndPassword(auth, email, password);
     const user = userCredential.user;
 
-    // Update display name
     await updateProfile(user, { displayName: name });
 
-    // Store additional user data in Firestore
     const userData: UserData = {
       uid: user.uid,
       email: user.email!,
       role,
+      schoolId,
       name,
       createdAt: new Date(),
+      updatedAt: new Date(),
     };
 
     await setDoc(doc(db, "users", user.uid), userData);
@@ -53,7 +60,6 @@ export async function signUp(
   }
 }
 
-// Sign in with email and password
 export async function signIn(
   email: string,
   password: string
@@ -62,7 +68,6 @@ export async function signIn(
     const userCredential = await signInWithEmailAndPassword(auth, email, password);
     const user = userCredential.user;
 
-    // Get user data from Firestore
     const userDoc = await getDoc(doc(db, "users", user.uid));
     const userData = userDoc.data() as UserData;
 
@@ -76,7 +81,6 @@ export async function signIn(
   }
 }
 
-// Sign out
 export async function logOut(): Promise<void> {
   try {
     await firebaseSignOut(auth);
@@ -85,7 +89,6 @@ export async function logOut(): Promise<void> {
   }
 }
 
-// Reset password
 export async function resetPassword(email: string): Promise<void> {
   try {
     await sendPasswordResetEmail(auth, email);
@@ -94,7 +97,6 @@ export async function resetPassword(email: string): Promise<void> {
   }
 }
 
-// Get user data from Firestore
 export async function getUserData(uid: string): Promise<UserData | null> {
   try {
     const userDoc = await getDoc(doc(db, "users", uid));
@@ -105,6 +107,22 @@ export async function getUserData(uid: string): Promise<UserData | null> {
   } catch (error: any) {
     throw new Error(error.message);
   }
+}
+
+export function hasPermission(
+  userData: UserData | null,
+  module: string,
+  action: string
+): boolean {
+  if (!userData) return false;
+  
+  // School admins have all permissions by default
+  if (userData.role === "school_admin") return true;
+  
+  if (!userData.permissions) return false;
+  
+  const modulePermission = userData.permissions.find(p => p.module === module);
+  return modulePermission ? modulePermission.actions.includes(action) : false;
 }
 
 export { logOut as signOut };

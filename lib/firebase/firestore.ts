@@ -17,28 +17,26 @@ import {
 } from "firebase/firestore";
 import { db } from "./config";
 
-// Generic CRUD operations for Firestore
 
-// Create a new document
 export async function createDocument(
   collectionName: string,
   data: any,
+  schoolId: string, // Added required schoolId parameter
   customId?: string
 ): Promise<string> {
   try {
+    const docData = {
+      ...data,
+      schoolId, // Always include schoolId in documents
+      createdAt: Timestamp.now(),
+      updatedAt: Timestamp.now(),
+    };
+
     if (customId) {
-      await setDoc(doc(db, collectionName, customId), {
-        ...data,
-        createdAt: Timestamp.now(),
-        updatedAt: Timestamp.now(),
-      });
+      await setDoc(doc(db, collectionName, customId), docData);
       return customId;
     } else {
-      const docRef = await addDoc(collection(db, collectionName), {
-        ...data,
-        createdAt: Timestamp.now(),
-        updatedAt: Timestamp.now(),
-      });
+      const docRef = await addDoc(collection(db, collectionName), docData);
       return docRef.id;
     }
   } catch (error: any) {
@@ -46,17 +44,21 @@ export async function createDocument(
   }
 }
 
-// Read a single document
 export async function getDocument(
   collectionName: string,
-  docId: string
+  docId: string,
+  schoolId: string // Added required schoolId parameter
 ): Promise<DocumentData | null> {
   try {
     const docRef = doc(db, collectionName, docId);
     const docSnap = await getDoc(docRef);
 
     if (docSnap.exists()) {
-      return { id: docSnap.id, ...docSnap.data() };
+      const data = { id: docSnap.id, ...docSnap.data() };
+      if (data.schoolId !== schoolId) {
+        throw new Error("Access denied: Document belongs to different school");
+      }
+      return data;
     }
     return null;
   } catch (error: any) {
@@ -64,14 +66,19 @@ export async function getDocument(
   }
 }
 
-// Read multiple documents with query
 export async function getDocuments(
   collectionName: string,
+  schoolId: string, // Added required schoolId parameter
   constraints?: QueryConstraint[]
 ): Promise<DocumentData[]> {
   try {
     const collectionRef = collection(db, collectionName);
-    const q = constraints ? query(collectionRef, ...constraints) : collectionRef;
+    const baseConstraints = [where("schoolId", "==", schoolId)];
+    const allConstraints = constraints 
+      ? [...baseConstraints, ...constraints] 
+      : baseConstraints;
+    
+    const q = query(collectionRef, ...allConstraints);
     const querySnapshot = await getDocs(q);
 
     return querySnapshot.docs.map((doc) => ({
@@ -83,14 +90,24 @@ export async function getDocuments(
   }
 }
 
-// Update a document
 export async function updateDocument(
   collectionName: string,
   docId: string,
-  data: Partial<any>
+  data: Partial<any>,
+  schoolId: string // Added required schoolId parameter
 ): Promise<void> {
   try {
     const docRef = doc(db, collectionName, docId);
+    const docSnap = await getDoc(docRef);
+    
+    if (!docSnap.exists()) {
+      throw new Error("Document not found");
+    }
+    
+    if (docSnap.data()?.schoolId !== schoolId) {
+      throw new Error("Access denied: Document belongs to different school");
+    }
+    
     await updateDoc(docRef, {
       ...data,
       updatedAt: Timestamp.now(),
@@ -100,32 +117,40 @@ export async function updateDocument(
   }
 }
 
-// Delete a document
 export async function deleteDocument(
   collectionName: string,
-  docId: string
+  docId: string,
+  schoolId: string // Added required schoolId parameter
 ): Promise<void> {
   try {
-    await deleteDoc(doc(db, collectionName, docId));
+    const docRef = doc(db, collectionName, docId);
+    const docSnap = await getDoc(docRef);
+    
+    if (!docSnap.exists()) {
+      throw new Error("Document not found");
+    }
+    
+    if (docSnap.data()?.schoolId !== schoolId) {
+      throw new Error("Access denied: Document belongs to different school");
+    }
+    
+    await deleteDoc(docRef);
   } catch (error: any) {
     throw new Error(`Delete document failed: ${error.message}`);
   }
 }
 
-// Example: Get students by class
-export async function getStudentsByClass(classId: string): Promise<DocumentData[]> {
-  return getDocuments("students", [where("classId", "==", classId), orderBy("name")]);
+export async function getStudentsByClass(classId: string, schoolId: string): Promise<DocumentData[]> {
+  return getDocuments("students", schoolId, [where("classId", "==", classId), orderBy("name")]);
 }
 
-// Example: Get assignments for a student
-export async function getAssignmentsByStudent(studentId: string): Promise<DocumentData[]> {
-  return getDocuments("assignments", [
+export async function getAssignmentsByStudent(studentId: string, schoolId: string): Promise<DocumentData[]> {
+  return getDocuments("assignments", schoolId, [
     where("studentId", "==", studentId),
     orderBy("dueDate", "desc"),
   ]);
 }
 
-// Example: Get announcements (latest 10)
-export async function getLatestAnnouncements(): Promise<DocumentData[]> {
-  return getDocuments("announcements", [orderBy("createdAt", "desc"), limit(10)]);
+export async function getLatestAnnouncements(schoolId: string): Promise<DocumentData[]> {
+  return getDocuments("announcements", schoolId, [orderBy("createdAt", "desc"), limit(10)]);
 }

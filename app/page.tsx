@@ -3,7 +3,7 @@
 import Link from "next/link";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
-import { GraduationCap, Users, BookOpen, Bell } from 'lucide-react';
+import { GraduationCap, Users, BookOpen, Bell, Building2, Shield } from 'lucide-react';
 
 export default function HomePage() {
   return (
@@ -15,7 +15,7 @@ export default function HomePage() {
           </div>
           <h1 className="text-5xl font-bold mb-4 text-balance">EduCore School Management</h1>
           <p className="text-xl text-muted-foreground max-w-2xl mx-auto text-balance">
-            A comprehensive platform for managing students, teachers, parents, and administrators
+            Multi-school platform with complete data isolation and role-based access control
           </p>
         </div>
 
@@ -26,6 +26,15 @@ export default function HomePage() {
               <CardDescription>Complete management solution</CardDescription>
             </CardHeader>
             <CardContent className="space-y-4">
+              <div className="flex items-start gap-3">
+                <Building2 className="h-5 w-5 text-blue-600 mt-0.5" />
+                <div>
+                  <h3 className="font-semibold">Multi-School Support</h3>
+                  <p className="text-sm text-muted-foreground">
+                    Each school has isolated data with independent management
+                  </p>
+                </div>
+              </div>
               <div className="flex items-start gap-3">
                 <Users className="h-5 w-5 text-blue-600 mt-0.5" />
                 <div>
@@ -45,11 +54,11 @@ export default function HomePage() {
                 </div>
               </div>
               <div className="flex items-start gap-3">
-                <Bell className="h-5 w-5 text-blue-600 mt-0.5" />
+                <Shield className="h-5 w-5 text-blue-600 mt-0.5" />
                 <div>
-                  <h3 className="font-semibold">Communication</h3>
+                  <h3 className="font-semibold">Security & Permissions</h3>
                   <p className="text-sm text-muted-foreground">
-                    Announcements and messaging between all users
+                    Role-based access control with audit logging
                   </p>
                 </div>
               </div>
@@ -82,13 +91,18 @@ export default function HomePage() {
           </Card>
         </div>
 
-        <div className="flex justify-center gap-4">
-          <Button size="lg" asChild>
-            <Link href="/login">Sign In</Link>
-          </Button>
-          <Button size="lg" variant="outline" asChild>
-            <Link href="/signup">Create Account</Link>
-          </Button>
+        <div className="flex flex-col items-center gap-6">
+          <div className="flex justify-center gap-4">
+            <Button size="lg" asChild>
+              <Link href="/login">Sign In</Link>
+            </Button>
+            <Button size="lg" variant="outline" asChild>
+              <Link href="/register-school">Register Your School</Link>
+            </Button>
+          </div>
+          <p className="text-sm text-muted-foreground">
+            Already registered? School admins can add teachers, students, and parents from their dashboard
+          </p>
         </div>
       </div>
     </div>

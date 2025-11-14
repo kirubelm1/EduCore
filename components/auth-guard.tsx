@@ -7,7 +7,7 @@ import { Loader2 } from 'lucide-react';
 
 interface AuthGuardProps {
   children: React.ReactNode;
-  allowedRoles?: ("admin" | "teacher" | "student" | "parent")[];
+  allowedRoles?: ("school_admin" | "teacher" | "student" | "parent")[];
   redirectTo?: string;
 }
 
@@ -20,9 +20,8 @@ export function AuthGuard({ children, allowedRoles, redirectTo = "/login" }: Aut
       if (!user) {
         router.push(redirectTo);
       } else if (allowedRoles && userData && !allowedRoles.includes(userData.role)) {
-        // Redirect to appropriate dashboard based on user role
         switch (userData.role) {
-          case "admin":
+          case "school_admin":
             router.push("/admin");
             break;
           case "teacher":

@@ -5,13 +5,7 @@ import { getFirestore, Firestore } from "firebase/firestore";
 import { getStorage, FirebaseStorage } from "firebase/storage";
 
 const firebaseConfig = {
-  apiKey: "replace",
-  authDomain: "replace",
-  projectId: "replace",
-  storageBucket: "replace",
-  messagingSenderId: "replace",
-  appId: "replace",
-  measurementId: "replace"
+//replace
 };
 
 // Initialize Firebase (singleton pattern to prevent multiple initializations)
