@@ -391,19 +391,4 @@ This project is licensed under the MIT License - see the LICENSE file for detail
 
 ## Support
 
-For support, email support@educore.example.com or open an issue on GitHub.
-
-## Roadmap
-
-- [ ] Add attendance tracking system
-- [ ] Implement grade calculation and GPA tracking
-- [ ] Add real-time chat between teachers and students
-- [ ] Implement calendar view for events and deadlines
-- [ ] Add parent-teacher conference scheduling
-- [ ] Implement report card generation
-- [ ] Add multi-language support
-- [ ] Mobile app (React Native)
-
----
-
 Made with ❤️ for better education management
