@@ -1,4 +1,4 @@
-# EduCore - School Management System
+# EduCore - School Management System (In Development)
 
 A comprehensive, modern school management system built with Next.js 16, Firebase, and TypeScript. EduCore provides role-based dashboards for administrators, teachers, students, and parents to streamline educational workflows and communication.
 
