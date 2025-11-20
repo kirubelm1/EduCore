@@ -69,10 +69,10 @@ A comprehensive, modern school management system built with Next.js 16, Firebase
 
 ### 1. Clone the repository
 
-\`\`\`bash
-git clone https://github.com/yourusername/educore.git
+````
+git clone https://github.com/kirubelm1/EduCore.git
 cd educore
-\`\`\`
+````
 
 ### 2. Install dependencies
 
